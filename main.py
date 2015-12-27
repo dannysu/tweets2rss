@@ -134,7 +134,7 @@ def parse_user():
         text = decorate_tweet_text(tweet)
         media = get_media(tweet)
 
-        profile_image = tweet['user']['profile_image_url'].replace('_normal', '_bigger')
+        profile_image = tweet['user']['profile_image_url'].replace('_normal', '_200x200')
         name = tweet['user']['name']
 
         template = Template("""
