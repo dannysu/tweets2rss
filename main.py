@@ -108,7 +108,8 @@ def parse_user():
     feed_description = screen_name + "'s tweets"
     if len(tweets) > 0:
         feed_title = tweets[0]['user']['name'] + ' on Twitter'
-        feed_description = tweets[0]['user']['description']
+        if len(tweets[0]['user']['description']) > 0:
+            feed_description = tweets[0]['user']['description']
         fg.image(tweets[0]['user']['profile_image_url'])
 
     fg.title(feed_title)
