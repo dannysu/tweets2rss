@@ -86,7 +86,7 @@ def get_media(tweet):
 
     return "".join(concat)
 
-def get_feed(feed_title, feed_description, feed_link, tweets):
+def get_feed(feed_title, feed_description, feed_link, tweets, screen_name_in_title=False):
     fg = FeedGenerator()
 
     fg.title(feed_title)
@@ -97,8 +97,13 @@ def get_feed(feed_title, feed_description, feed_link, tweets):
     for tweet in tweets:
         fe = fg.add_entry()
         fe.id(tweet['id_str'])
-        fe.title(tweet['text'])
         screen_name = tweet['user']['screen_name']
+
+        if screen_name_in_title:
+            fe.title('@' + screen_name + ': ' + tweet['text'])
+        else:
+            fe.title(tweet['text'])
+
         fe.link(href='https://twitter.com/%s/status/%s' % (screen_name, tweet['id_str']))
         fe.published(tweet['created_at'])
 
@@ -204,7 +209,7 @@ def parse_list():
 
     feed_link = 'https://twitter.com/%s/lists/%s' % (screen_name, slug)
 
-    return get_feed(feed_title, feed_description, feed_link, tweets)
+    return get_feed(feed_title, feed_description, feed_link, tweets, True)
 
 
 @app.route('/search')
