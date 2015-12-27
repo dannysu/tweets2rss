@@ -100,6 +100,10 @@ def parse_user():
     if screen_name == None:
         return 'No screen_name provided', 500
 
+    exclude_retweets = False
+    if request.args.get('no_rt') == 'true':
+        exclude_retweets = True
+
     tweets = t.statuses.user_timeline(screen_name=screen_name)
 
     fg = FeedGenerator()
@@ -117,6 +121,9 @@ def parse_user():
     fg.link(href='https://twitter.com/' + screen_name)
 
     for tweet in tweets:
+        if 'retweeted_status' in tweet and exclude_retweets:
+            continue
+
         fe = fg.add_entry()
         fe.id(tweet['id_str'])
         fe.title(tweet['text'])
