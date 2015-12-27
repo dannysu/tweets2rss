@@ -118,11 +118,11 @@ def parse_user():
         feed_title = tweets[0]['user']['name'] + ' on Twitter'
         if len(tweets[0]['user']['description']) > 0:
             feed_description = tweets[0]['user']['description']
-        fg.image(tweets[0]['user']['profile_image_url'])
 
     fg.title(feed_title)
     fg.description(feed_description)
     fg.link(href='https://twitter.com/' + screen_name)
+    fg.image('http://abs.twimg.com/favicons/favicon.ico')
 
     for tweet in tweets:
         fe = fg.add_entry()
