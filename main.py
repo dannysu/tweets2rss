@@ -134,7 +134,7 @@ def parse_user():
         text = decorate_tweet_text(tweet)
         media = get_media(tweet)
 
-        profile_image = tweet['user']['profile_image_url']
+        profile_image = tweet['user']['profile_image_url'].replace('_normal', '_bigger')
         name = tweet['user']['name']
 
         template = Template("""
@@ -147,7 +147,7 @@ def parse_user():
                 <body>
                     <table>
                     <tr>
-                        <td><img src="{{profile_image}}"></td>
+                        <td><img src="{{profile_image}}" width="48" height="48"></td>
                         <td>
                             <strong>{{name}}</strong><br>
                             @{{screen_name}}
