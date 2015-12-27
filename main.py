@@ -109,6 +109,7 @@ def parse_user():
     if len(tweets) > 0:
         feed_title = tweets[0]['user']['name'] + ' on Twitter'
         feed_description = tweets[0]['user']['description']
+        fg.image(tweets[0]['user']['profile_image_url'])
 
     fg.title(feed_title)
     fg.description(feed_description)
@@ -119,6 +120,7 @@ def parse_user():
         fe.id(tweet['id_str'])
         fe.title(tweet['text'])
         fe.link(href='https://twitter.com/%s/status/%s' % (screen_name, tweet['id_str']))
+        fe.published(tweet['created_at'])
 
         text = decorate_tweet_text(tweet)
         media = get_media(tweet)
