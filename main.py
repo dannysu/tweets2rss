@@ -92,7 +92,7 @@ def get_feed(feed_title, feed_description, feed_link, tweets, screen_name_in_tit
     fg.title(feed_title)
     fg.description(feed_description)
     fg.link(href=feed_link)
-    fg.image('http://abs.twimg.com/favicons/favicon.ico')
+    fg.image('https://abs.twimg.com/favicons/favicon.ico')
 
     for tweet in tweets:
         fe = fg.add_entry()
