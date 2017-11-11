@@ -46,9 +46,9 @@ def get_feed(feed_title, feed_description, feed_link, tweets, screen_name_in_tit
         screen_name = tweet['user']['screen_name']
 
         if screen_name_in_title:
-            fe.title('@' + screen_name + ': ' + tweet['text'])
+            fe.title('@' + screen_name + ': ' + tweet['full_text'])
         else:
-            fe.title(tweet['text'])
+            fe.title(tweet['full_text'])
 
         fe.link(href='https://twitter.com/%s/status/%s' % (screen_name, tweet['id_str']))
         fe.published(tweet['created_at'])
@@ -108,7 +108,10 @@ def parse_user():
     if request.args.get('no_replies') == 'true':
         exclude_replies = True
 
-    tweets = t.statuses.user_timeline(screen_name=screen_name, include_rts=include_rts, exclude_replies=exclude_replies)
+    tweets = t.statuses.user_timeline(screen_name=screen_name,
+                                      include_rts=include_rts,
+                                      exclude_replies=exclude_replies,
+                                      tweet_mode='extended')
 
     feed_title = screen_name
     feed_description = screen_name + "'s tweets"
@@ -146,7 +149,11 @@ def parse_list():
 
     list_info = t.lists.show(owner_screen_name=screen_name, slug=slug)
 
-    tweets = t.lists.statuses(owner_screen_name=screen_name, slug=slug, include_rts=include_rts, count=200)
+    tweets = t.lists.statuses(owner_screen_name=screen_name,
+                              slug=slug,
+                              include_rts=include_rts,
+                              count=200,
+                              tweet_mode='extended')
 
     feed_title = '@' + list_info['user']['screen_name'] + '/' + list_info['name'] + ' on Twitter'
     feed_description = 'A list by ' + list_info['user']['name']

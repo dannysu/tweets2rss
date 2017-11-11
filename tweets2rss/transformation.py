@@ -2,7 +2,7 @@
 from jinja2 import Template
 
 def decorate(tweet):
-    text = tweet['text']
+    text = tweet['full_text']
 
     text_replacements = []
 
