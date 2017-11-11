@@ -3,3 +3,7 @@ watch:
 
 test:
 	python -m unittest discover
+
+deploy:
+	read -r -p "Version: " VERSION;\
+	gcloud app deploy --version=$$VERSION
