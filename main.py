@@ -45,10 +45,12 @@ def get_feed(feed_title, feed_description, feed_link, tweets, screen_name_in_tit
         fe.id(tweet['id_str'])
         screen_name = tweet['user']['screen_name']
 
+        title = decorate(tweet, use_html=False)
+
         if screen_name_in_title:
-            fe.title('@' + screen_name + ': ' + tweet['full_text'])
+            fe.title('@' + screen_name + ': ' + title)
         else:
-            fe.title(tweet['full_text'])
+            fe.title(title)
 
         fe.link(href='https://twitter.com/%s/status/%s' % (screen_name, tweet['id_str']))
         fe.published(tweet['created_at'])
