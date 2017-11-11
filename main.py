@@ -17,61 +17,7 @@ app = Flask(__name__)
 # Note: We don't need to call run() since our application is embedded within
 # the App Engine WSGI application server.
 
-
-def decorate_tweet_text(tweet):
-    text = tweet['text']
-
-    text_replacements = []
-
-    # Replace hashtags with clickable links
-    hashtags = tweet['entities']['hashtags']
-    for hashtag in hashtags:
-        indices = hashtag['indices']
-        start = indices[0]
-        end = indices[1]
-        hashtag_text = hashtag['text']
-        replacement_template = Template('<a href="https://twitter.com/hashtag/{{hashtag}}?src=hash">{{original_text}}</a>')
-        replacement = replacement_template.render(hashtag=hashtag_text, original_text=text[start:end + 1])
-        text_replacements.append({'start':start, 'end':end, 'replacement':replacement})
-
-    # Replace user mentions with clickable links
-    user_mentions = tweet['entities']['user_mentions']
-    for mention in user_mentions:
-        indices = mention['indices']
-        start = indices[0]
-        end = indices[1]
-        user_id = mention['screen_name']
-        replacement_template = Template('<a href="https://twitter.com/{{screen_name}}">{{original_text}}</a>')
-        replacement = replacement_template.render(screen_name=user_id, original_text=text[start:end + 1])
-        text_replacements.append({'start':start, 'end':end, 'replacement':replacement})
-
-    # Replace urls with clickable links
-    urls = tweet['entities']['urls']
-    for url in urls:
-        indices = url['indices']
-        start = indices[0]
-        end = indices[1]
-        display_url = url['display_url']
-        expanded_url = url['expanded_url']
-        replacement_template = Template('<a href="{{href}}">{{display_url}}</a>')
-        replacement = replacement_template.render(href=expanded_url, display_url=display_url)
-        text_replacements.append({'start':start, 'end':end, 'replacement':replacement})
-
-    text_replacements = sorted(text_replacements, key=lambda replacement: replacement['start'])
-
-    text_components = []
-
-    start = 0
-    for replacement in text_replacements:
-        if replacement['start'] - start > 0:
-            text_components.append(text[start:replacement['start']])
-        text_components.append(replacement['replacement'])
-        start = replacement['end'] + 1
-
-    if start < len(text) - 1:
-        text_components.append(text[start:])
-
-    return "".join(text_components)
+from tweets2rss.transformation import decorate
 
 def get_media(tweet):
     if 'media' not in tweet['entities']:
@@ -107,7 +53,7 @@ def get_feed(feed_title, feed_description, feed_link, tweets, screen_name_in_tit
         fe.link(href='https://twitter.com/%s/status/%s' % (screen_name, tweet['id_str']))
         fe.published(tweet['created_at'])
 
-        text = decorate_tweet_text(tweet)
+        text = decorate(tweet)
         media = get_media(tweet)
 
         profile_image = tweet['user']['profile_image_url']
