@@ -35,3 +35,7 @@ libraries:
   version: latest
 - name: lxml
   version: latest
+
+env_variables:
+  # Validate certificates
+  PYTHONHTTPSVERIFY: 1

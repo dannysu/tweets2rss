@@ -14,7 +14,7 @@ Google's instruction on how to deploy to App Engine is [here][1].
 First, you want to create an isolated Python environment using `virtualenv`:
 ```
 virtualenv venv
-source venv/bin/activvat
+source venv/bin/activate
 ```
 
 Install dependencies. This step is necessary since GAE deployment will upload the files from the libraries too.
